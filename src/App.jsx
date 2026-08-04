@@ -1,22 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { Home, Package, Calculator, Users, FileText, Bell, ArrowLeft, LogOut } from 'lucide-react';
 
-// --- Placeholders pour les pages non encore développées (à remplacer plus tard) ---
+// --- Pages (tous les modules) ---
+import DevisDetail from './pages/Admin/DevisDetail';
+import DashboardAdmin from './pages/Admin/DashboardAdmin';
+import ValidationMissions from './pages/Admin/ValidationMissions';
+import Catalogue from './pages/Catalogue';
+import Calculateur from './pages/Calculateur';
+import ProsBTP from './pages/ProsBTP';
+import DemandeDevis from './pages/DemandeDevis';
+import SuiviChantier from './pages/SuiviChantier';
+import Formation from './pages/Formation';
+import Paiement from './pages/Paiement';
+import AssistantIA from './pages/AssistantIA';
+import Galerie from './pages/Galerie';
+import Ressources from './pages/Ressources';
+import Notifications from './pages/Notifications';
+import MissionsTechnicien from './pages/MissionsTechnicien';
+import OTPSetup from './pages/OTPSetup';
+
+// --- Placeholder au cas où (ne devrait plus être utilisé) ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6 text-center">
     <h2 className="text-2xl font-bold text-amber-800">{title}</h2>
     <p className="text-gray-600 mt-4">Module en cours de développement</p>
-    <div className="mt-8 bg-gray-100 p-8 rounded-xl border-2 border-dashed border-gray-300">
-      <p className="text-gray-500">🔨 Contenu à venir</p>
-    </div>
   </div>
 );
 
-// --- Pages réelles déjà codées (ou placeholders si manquantes) ---
-import DevisDetail from './pages/Admin/DevisDetail';
-
-// Composant page d'accueil (avec les raccourcis)
+// --- Page d'accueil (avec raccourcis) ---
 const HomePage = () => {
   const navigate = useNavigate();
   const shortcuts = [
@@ -32,6 +44,8 @@ const HomePage = () => {
     { icon: Bell, label: 'Ressources', path: '/ressources' },
     { icon: Bell, label: 'Notifications', path: '/notifications' },
     { icon: Bell, label: 'Admin', path: '/admin/dashboard' },
+    { icon: Bell, label: 'Mes missions', path: '/missions' },
+    { icon: Bell, label: 'Sécurité (OTP)', path: '/otp' },
   ];
 
   return (
@@ -62,11 +76,11 @@ const HomePage = () => {
   );
 };
 
-// --- Layout avec en-tête et navigation basse ---
+// --- Layout global avec en-tête et navigation basse ---
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [notifCount] = useState(3); // exemple
+  const [notifCount] = useState(3); // sera remplacé par les vraies notifications
 
   const navItems = [
     { icon: Home, label: 'Accueil', path: '/' },
@@ -138,26 +152,31 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Layout avec navigation */}
+        {/* Routes avec Layout (navigation) */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="produits" element={<PlaceholderPage title="Catalogue produits" />} />
-          <Route path="calculateur" element={<PlaceholderPage title="Calculateur de besoins" />} />
-          <Route path="pros" element={<PlaceholderPage title="Réseau de professionnels BTP" />} />
-          <Route path="devis" element={<PlaceholderPage title="Demande de devis" />} />
-          <Route path="suivi" element={<PlaceholderPage title="Suivi de chantier" />} />
-          <Route path="formation" element={<PlaceholderPage title="Luxerboard Academy" />} />
-          <Route path="paiement" element={<PlaceholderPage title="Paiement mobile" />} />
-          <Route path="assistant" element={<PlaceholderPage title="Assistant IA" />} />
-          <Route path="galerie" element={<PlaceholderPage title="Galerie de réalisations" />} />
-          <Route path="ressources" element={<PlaceholderPage title="Ressources documentaires" />} />
-          <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
+          <Route path="produits" element={<Catalogue />} />
+          <Route path="calculateur" element={<Calculateur />} />
+          <Route path="pros" element={<ProsBTP />} />
+          <Route path="devis" element={<DemandeDevis />} />
+          <Route path="suivi" element={<SuiviChantier />} />
+          <Route path="formation" element={<Formation />} />
+          <Route path="paiement" element={<Paiement />} />
+          <Route path="assistant" element={<AssistantIA />} />
+          <Route path="galerie" element={<Galerie />} />
+          <Route path="ressources" element={<Ressources />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="missions" element={<MissionsTechnicien />} />
+          <Route path="otp" element={<OTPSetup />} />
         </Route>
 
-        {/* Routes sans layout (plein écran) pour l'admin */}
+        {/* Routes Admin (plein écran, sans layout) */}
         <Route path="/admin/devis/:id" element={<DevisDetail />} />
-        <Route path="/admin/dashboard" element={<PlaceholderPage title="Tableau de bord Admin" />} />
-        {/* Ajoutez d'autres routes admin ici */}
+        <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+        <Route path="/admin/validation-missions" element={<ValidationMissions />} />
+
+        {/* Fallback si route inconnue */}
+        <Route path="*" element={<PlaceholderPage title="Page non trouvée" />} />
       </Routes>
     </BrowserRouter>
   );
