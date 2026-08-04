@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { Home, Package, Calculator, Users, FileText, Bell, ArrowLeft, LogOut } from 'lucide-react';
 
 // --- Pages (tous les modules) ---
 import DevisDetail from './pages/Admin/DevisDetail';
@@ -20,7 +19,7 @@ import Notifications from './pages/Notifications';
 import MissionsTechnicien from './pages/MissionsTechnicien';
 import OTPSetup from './pages/OTPSetup';
 
-// --- Placeholder au cas où (ne devrait plus être utilisé) ---
+// --- Placeholder au cas où ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6 text-center">
     <h2 className="text-2xl font-bold text-amber-800">{title}</h2>
@@ -28,24 +27,24 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
-// --- Page d'accueil (avec raccourcis) ---
+// --- Page d'accueil (avec raccourcis en emojis) ---
 const HomePage = () => {
   const navigate = useNavigate();
   const shortcuts = [
-    { icon: Package, label: 'Catalogue', path: '/produits' },
-    { icon: Calculator, label: 'Calculateur', path: '/calculateur' },
-    { icon: FileText, label: 'Demande de devis', path: '/devis' },
-    { icon: Users, label: 'Réseau pros', path: '/pros' },
-    { icon: Home, label: 'Suivi chantier', path: '/suivi' },
-    { icon: Bell, label: 'Formation', path: '/formation' },
-    { icon: Bell, label: 'Paiement', path: '/paiement' },
-    { icon: Bell, label: 'Assistant IA', path: '/assistant' },
-    { icon: Bell, label: 'Galerie', path: '/galerie' },
-    { icon: Bell, label: 'Ressources', path: '/ressources' },
-    { icon: Bell, label: 'Notifications', path: '/notifications' },
-    { icon: Bell, label: 'Admin', path: '/admin/dashboard' },
-    { icon: Bell, label: 'Mes missions', path: '/missions' },
-    { icon: Bell, label: 'Sécurité (OTP)', path: '/otp' },
+    { icon: '📦', label: 'Catalogue', path: '/produits' },
+    { icon: '🧮', label: 'Calculateur', path: '/calculateur' },
+    { icon: '📄', label: 'Demande de devis', path: '/devis' },
+    { icon: '👥', label: 'Réseau pros', path: '/pros' },
+    { icon: '🏠', label: 'Suivi chantier', path: '/suivi' },
+    { icon: '🎓', label: 'Formation', path: '/formation' },
+    { icon: '💳', label: 'Paiement', path: '/paiement' },
+    { icon: '🤖', label: 'Assistant IA', path: '/assistant' },
+    { icon: '🖼️', label: 'Galerie', path: '/galerie' },
+    { icon: '📚', label: 'Ressources', path: '/ressources' },
+    { icon: '🔔', label: 'Notifications', path: '/notifications' },
+    { icon: '📊', label: 'Admin', path: '/admin/dashboard' },
+    { icon: '📋', label: 'Mes missions', path: '/missions' },
+    { icon: '🔐', label: 'Sécurité (OTP)', path: '/otp' },
   ];
 
   return (
@@ -67,7 +66,7 @@ const HomePage = () => {
             onClick={() => navigate(item.path)}
             className="bg-white p-4 rounded-xl shadow hover:shadow-md transition-all flex flex-col items-center border border-gray-100"
           >
-            <item.icon className="w-8 h-8 text-amber-700" />
+            <span className="text-3xl">{item.icon}</span>
             <span className="text-xs font-medium text-gray-700 mt-2 text-center">{item.label}</span>
           </button>
         ))}
@@ -80,17 +79,16 @@ const HomePage = () => {
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [notifCount] = useState(3); // sera remplacé par les vraies notifications
+  const [notifCount] = useState(3);
 
   const navItems = [
-    { icon: Home, label: 'Accueil', path: '/' },
-    { icon: Package, label: 'Produits', path: '/produits' },
-    { icon: Calculator, label: 'Calcul', path: '/calculateur' },
-    { icon: Users, label: 'Pros BTP', path: '/pros' },
-    { icon: FileText, label: 'Devis', path: '/devis' },
+    { icon: '🏠', label: 'Accueil', path: '/' },
+    { icon: '📦', label: 'Produits', path: '/produits' },
+    { icon: '🧮', label: 'Calcul', path: '/calculateur' },
+    { icon: '👥', label: 'Pros BTP', path: '/pros' },
+    { icon: '📄', label: 'Devis', path: '/devis' },
   ];
 
-  // Cacher la navigation sur certaines pages (admin, etc.)
   const hideNav = location.pathname.startsWith('/admin');
 
   return (
@@ -100,14 +98,14 @@ const Layout = () => {
         <div className="flex items-center gap-2">
           {location.pathname !== '/' && (
             <button onClick={() => navigate(-1)} className="p-1 hover:bg-gray-100 rounded">
-              <ArrowLeft className="w-5 h-5 text-amber-800" />
+              <span className="text-xl">←</span>
             </button>
           )}
           <span className="font-serif font-bold text-amber-900 text-lg">BTT-LUX</span>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/notifications')} className="relative">
-            <Bell className="w-5 h-5 text-gray-600" />
+            <span className="text-xl">🔔</span>
             {notifCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
                 {notifCount}
@@ -115,7 +113,7 @@ const Layout = () => {
             )}
           </button>
           <button onClick={() => navigate('/')} className="text-gray-500">
-            <LogOut className="w-5 h-5" />
+            <span className="text-xl">🚪</span>
           </button>
         </div>
       </header>
@@ -136,7 +134,7 @@ const Layout = () => {
                 to={item.path}
                 className={`flex flex-col items-center text-xs ${isActive ? 'text-amber-700' : 'text-gray-500'}`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'text-amber-700' : 'text-gray-500'}`} />
+                <span className="text-xl">{item.icon}</span>
                 <span className="mt-1">{item.label}</span>
               </Link>
             );
@@ -175,7 +173,7 @@ function App() {
         <Route path="/admin/dashboard" element={<DashboardAdmin />} />
         <Route path="/admin/validation-missions" element={<ValidationMissions />} />
 
-        {/* Fallback si route inconnue */}
+        {/* Fallback */}
         <Route path="*" element={<PlaceholderPage title="Page non trouvée" />} />
       </Routes>
     </BrowserRouter>
