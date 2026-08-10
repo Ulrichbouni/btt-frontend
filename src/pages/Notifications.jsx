@@ -5,44 +5,39 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Notifications simulées (à connecter à l'API)
-    const saved = localStorage.getItem('notifications');
-    if (saved) {
-      setNotifications(JSON.parse(saved));
-    } else {
-      const defaults = [
-        { id: 1, titre: 'Bienvenue sur BTT-LUX Ap', corps: 'Découvrez notre catalogue de produits', lu: false, date: new Date() },
-        { id: 2, titre: 'Devis envoyé', corps: 'Votre devis #1 a bien été reçu', lu: false, date: new Date() },
-      ];
-      setNotifications(defaults);
-      localStorage.setItem('notifications', JSON.stringify(defaults));
-    }
+    const fetch = async () => {
+      try {
+        const { data } = await api.get('/notifications');
+        setNotifications(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetch();
   }, []);
 
-  const markAsRead = (id) => {
-    const updated = notifications.map(n => n.id === id ? { ...n, lu: true } : n);
-    setNotifications(updated);
-    localStorage.setItem('notifications', JSON.stringify(updated));
+  const markAsRead = async (id) => {
+    await api.patch(`/notifications/${id}/lu`);
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, lu: true } : n));
   };
 
-  const countUnread = notifications.filter(n => !n.lu).length;
+  const unread = notifications.filter(n => !n.lu).length;
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-serif font-bold text-amber-900">🔔 Notifications</h1>
-        {countUnread > 0 && <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{countUnread} non lues</span>}
+        <h1 className="text-2xl font-serif font-bold text-amber-900">Notifications</h1>
+        {unread > 0 && <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{unread} non lues</span>}
       </div>
+      {notifications.length === 0 && <p className="text-gray-500">Aucune notification</p>}
       {notifications.map(n => (
         <div key={n.id} className={`p-4 rounded-xl mb-3 border ${n.lu ? 'bg-white border-gray-200' : 'bg-blue-50 border-blue-300'}`}>
           <div className="flex justify-between">
             <h3 className="font-bold">{n.titre}</h3>
-            <button onClick={() => markAsRead(n.id)} className="text-sm text-blue-600">
-              {n.lu ? '✅ Lu' : 'Marquer comme lu'}
-            </button>
+            {!n.lu && <button onClick={() => markAsRead(n.id)} className="text-sm text-blue-600">Marquer lu</button>}
           </div>
           <p className="text-sm text-gray-600">{n.corps}</p>
-          <p className="text-xs text-gray-400 mt-1">{new Date(n.date).toLocaleDateString()}</p>
+          <p className="text-xs text-gray-400 mt-1">{new Date(n.date_envoi).toLocaleString()}</p>
         </div>
       ))}
     </div>

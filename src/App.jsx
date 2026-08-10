@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import api from './services/api';
 
-// --- Pages (tous les modules) ---
 import DevisDetail from './pages/Admin/DevisDetail';
 import DashboardAdmin from './pages/Admin/DashboardAdmin';
 import ValidationMissions from './pages/Admin/ValidationMissions';
@@ -18,141 +18,114 @@ import Ressources from './pages/Ressources';
 import Notifications from './pages/Notifications';
 import MissionsTechnicien from './pages/MissionsTechnicien';
 import OTPSetup from './pages/OTPSetup';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
-// --- Placeholder au cas où ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6 text-center">
     <h2 className="text-2xl font-bold text-amber-800">{title}</h2>
-    <p className="text-gray-600 mt-4">Module en cours de développement</p>
+    <p className="text-gray-600 mt-4">Module en cours de d�veloppement</p>
   </div>
 );
 
-// --- Page d'accueil (avec raccourcis en emojis) ---
-const HomePage = () => {
+function Layout({ user, onLogout }) {
   const navigate = useNavigate();
-  const shortcuts = [
-    { icon: '📦', label: 'Catalogue', path: '/produits' },
-    { icon: '🧮', label: 'Calculateur', path: '/calculateur' },
-    { icon: '📄', label: 'Demande de devis', path: '/devis' },
-    { icon: '👥', label: 'Réseau pros', path: '/pros' },
-    { icon: '🏠', label: 'Suivi chantier', path: '/suivi' },
-    { icon: '🎓', label: 'Formation', path: '/formation' },
-    { icon: '💳', label: 'Paiement', path: '/paiement' },
-    { icon: '🤖', label: 'Assistant IA', path: '/assistant' },
-    { icon: '🖼️', label: 'Galerie', path: '/galerie' },
-    { icon: '📚', label: 'Ressources', path: '/ressources' },
-    { icon: '🔔', label: 'Notifications', path: '/notifications' },
-    { icon: '📊', label: 'Admin', path: '/admin/dashboard' },
-    { icon: '📋', label: 'Mes missions', path: '/missions' },
-    { icon: '🔐', label: 'Sécurité (OTP)', path: '/otp' },
-  ];
-
-  return (
-    <div className="p-4">
-      <div className="bg-gradient-to-r from-amber-50 to-amber-100 p-6 rounded-2xl shadow-sm mb-6">
-        <h1 className="text-3xl font-serif font-bold text-amber-900">BTT-LUX Ap</h1>
-        <p className="text-amber-700">Begueni Timber Trading · Luxerboard</p>
-        <div className="flex gap-2 mt-3">
-          <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">ISO 9001</span>
-          <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">JAS-ANZ</span>
-          <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">Sans amiante</span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-3">
-        {shortcuts.map((item) => (
-          <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className="bg-white p-4 rounded-xl shadow hover:shadow-md transition-all flex flex-col items-center border border-gray-100"
-          >
-            <span className="text-3xl">{item.icon}</span>
-            <span className="text-xs font-medium text-gray-700 mt-2 text-center">{item.label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// --- Layout global avec en-tête et navigation basse ---
-const Layout = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [notifCount] = useState(3);
+
+  useEffect(() => {
+    api.interceptors.request.use((config) => {
+      const token = localStorage.getItem('token');
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    });
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    onLogout();
+  };
 
   const navItems = [
-    { icon: '🏠', label: 'Accueil', path: '/' },
-    { icon: '📦', label: 'Produits', path: '/produits' },
-    { icon: '🧮', label: 'Calcul', path: '/calculateur' },
-    { icon: '👥', label: 'Pros BTP', path: '/pros' },
-    { icon: '📄', label: 'Devis', path: '/devis' },
+    { icon: '??', label: 'Catalogue', path: '/produits' },
+    { icon: '??', label: 'Calculateur', path: '/calculateur' },
+    { icon: '??', label: 'Devis', path: '/devis' },
+    { icon: '??', label: 'Paiement', path: '/paiement' },
+    { icon: '??', label: 'Notifications', path: '/notifications' },
+    { icon: '??', label: 'Missions', path: '/missions' },
   ];
 
-  const hideNav = location.pathname.startsWith('/admin');
-
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen flex flex-col relative">
-      {/* En-tête fixe */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3 flex items-center justify-between">
+    <div className="flex flex-col h-screen">
+      <header className="bg-white border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {location.pathname !== '/' && (
             <button onClick={() => navigate(-1)} className="p-1 hover:bg-gray-100 rounded">
-              <span className="text-xl">←</span>
+              <span className="text-xl">?</span>
             </button>
           )}
           <span className="font-serif font-bold text-amber-900 text-lg">BTT-LUX</span>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/notifications')} className="relative">
-            <span className="text-xl">🔔</span>
-            {notifCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                {notifCount}
-              </span>
-            )}
-          </button>
-          <button onClick={() => navigate('/')} className="text-gray-500">
-            <span className="text-xl">🚪</span>
-          </button>
+          <span className="text-sm text-gray-600">{user?.nom || user?.email}</span>
+          <button onClick={logout} className="text-gray-500">??</button>
         </div>
       </header>
 
-      {/* Contenu principal */}
-      <main className="flex-1 pb-20 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
 
-      {/* Barre de navigation basse */}
-      {!hideNav && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 max-w-md mx-auto z-10">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.path === '/' && location.pathname === '/');
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex flex-col items-center text-xs ${isActive ? 'text-amber-700' : 'text-gray-500'}`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="mt-1">{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      )}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center h-16 max-w-md mx-auto z-10">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link key={item.path} to={item.path} className={`flex flex-col items-center text-xs ${isActive ? 'text-amber-700' : 'text-gray-500'}`}>
+              <span className="text-xl">{item.icon}</span>
+              <span className="mt-1">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
-};
+}
 
-// --- Composant principal App ---
 function App() {
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('user');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    api.get('/auth/me').catch(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    });
+  }, []);
+
+  if (!user) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login onLogin={setUser} />} />
+          <Route path="/register" element={<Register onRegistered={(u) => setUser(u)} />} />
+          <Route path="*" element={<Login onLogin={setUser} />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Routes avec Layout (navigation) */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
+        <Route path="/" element={<Layout user={user} onLogout={() => setUser(null)} />}>
+          <Route index element={<PlaceholderPage title="Accueil" />} />
           <Route path="produits" element={<Catalogue />} />
           <Route path="calculateur" element={<Calculateur />} />
           <Route path="pros" element={<ProsBTP />} />
@@ -168,16 +141,21 @@ function App() {
           <Route path="otp" element={<OTPSetup />} />
         </Route>
 
-        {/* Routes Admin (plein écran, sans layout) */}
         <Route path="/admin/devis/:id" element={<DevisDetail />} />
         <Route path="/admin/dashboard" element={<DashboardAdmin />} />
         <Route path="/admin/validation-missions" element={<ValidationMissions />} />
-
-        {/* Fallback */}
-        <Route path="*" element={<PlaceholderPage title="Page non trouvée" />} />
+        <Route path="*" element={<PlaceholderPage title="Page non trouvee" />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
+
