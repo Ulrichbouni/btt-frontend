@@ -39,7 +39,7 @@ export default function Register({ onRegistered }) {
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-serif font-bold text-amber-900 mb-4">Inscription</h1>
       {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
-      {step === 'otp' ?? (
+      {step === 'otp' ? (
         <form onSubmit={requestOTP} className="space-y-3">
           <input className="border p-2 w-full rounded" placeholder="Telephone" value={form.telephone} onChange={e => setForm({ ...form, telephone: e.target.value })} />
           <button className="bg-amber-700 text-white p-3 w-full rounded font-bold" type="submit">Recevoir le code OTP</button>

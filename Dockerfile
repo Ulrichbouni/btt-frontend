@@ -10,6 +10,10 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
+# URL de l'API embarquée au build (fournie par docker compose --build-arg)
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
+
 # Build the application
 RUN npm run build
 

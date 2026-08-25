@@ -47,7 +47,7 @@ export default function Paiement() {
       return;
     }
     if (!phone || phone.length < 8) {
-      alert('Veuillez entrer un numéro de téléphone valide');
+      alert('Veuillez entrer un numÃ©ro de tÃ©lÃ©phone valide');
       return;
     }
 
@@ -76,16 +76,16 @@ export default function Paiement() {
       });
 
       window.campay.onSuccess = (paymentData) => {
-        alert('Paiement réussi\nRéf: ' + (paymentData.reference || data.reference));
+        alert('Paiement rÃ©ussi\nRÃ©f: ' + (paymentData.reference || data.reference));
         fetchHistorique();
       };
 
       window.campay.onFail = (paymentData) => {
-        alert('Paiement échoué\nRéf: ' + (paymentData.reference || data.reference));
+        alert('Paiement Ã©chouÃ©\nRÃ©f: ' + (paymentData.reference || data.reference));
       };
 
       window.campay.onModalClose = (paymentData) => {
-        alert('Modal fermée\nStatut: ' + (paymentData.status || 'unknown'));
+        alert('Modal fermÃ©e\nStatut: ' + (paymentData.status || 'unknown'));
       };
 
       if (typeof window.campay.open === 'function') {
@@ -110,7 +110,7 @@ export default function Paiement() {
         />
         <input
           className="border p-2 w-full rounded"
-          placeholder="Téléphone"
+          placeholder="TÃ©lÃ©phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
@@ -140,7 +140,7 @@ export default function Paiement() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-semibold">{p.montant?.toLocaleString()} FCFA</p>
-                    <p className="text-xs text-gray-400">Réf: {p.reference}</p>
+                    <p className="text-xs text-gray-400">RÃ©f: {p.reference}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs font-semibold">{p.statut}</p>
@@ -151,7 +151,7 @@ export default function Paiement() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-center py-4">Aucun paiement effectué</p>
+          <p className="text-gray-500 text-center py-4">Aucun paiement effectuÃ©</p>
         )}
       </div>
     </div>

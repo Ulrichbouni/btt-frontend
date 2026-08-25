@@ -1,16 +1,66 @@
-# React + Vite
+# BTT-LUX — Frontend Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Application web React de la plateforme BTT-LUX : catalogue, calculateur de besoins, devis, paiement, missions technicien, suivi de chantier, espace admin, assistant IA, notifications.
 
-Currently, two official plugins are available:
+**Stack :** React 18 · Vite 8 · React Router 7 · Tailwind CSS 3 · Axios · lucide-react · qrcode.react
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Démarrage local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+cp .env.example .env        # VITE_API_URL=http://localhost:5000/api
+npm run dev                 # http://localhost:5173
+```
 
-## Expanding the Oxlint configuration
+## Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```
+src/
+  pages/            Écrans (Catalogue, Calculateur, Devis, Paiement, AssistantIA…)
+    Admin/          Tableau de bord admin, détails devis, validation missions
+    Technicien/     Missions technicien, prises de mesures
+  services/api.js   Client Axios (baseURL = VITE_API_URL, injection du JWT)
+  assets/           Images, styles, favicon
+  App.jsx           Routage (React Router) + layout principal
+  main.jsx          Point d'entrée
+```
+
+## Routes
+
+| Route | Page |
+|-------|------|
+| `/login` · `/register` | Authentification (JWT stocké en `localStorage`) |
+| `/produits` | Catalogue Luxerboard |
+| `/calculateur` | Calculateur de besoins/coûts |
+| `/pros` | Professionnels BTP |
+| `/devis` | Demande & suivi de devis |
+| `/suivi` | Suivi de chantier |
+| `/formation` · `/galerie` · `/ressources` | Contenus |
+| `/paiement` | Paiement (Campay mobile money) |
+| `/assistant` | Assistant IA |
+| `/notifications` | Centre de notifications |
+| `/missions` · `/otp` | Missions technicien · configuration 2FA |
+| `/admin/dashboard` · `/admin/devis/:id` · `/admin/validation-missions` | Espace admin |
+
+## Variables d'environnement
+
+| Variable | Rôle |
+|----------|------|
+| `VITE_API_URL` | URL de base de l'API backend (obligatoire, embarquée au build) |
+
+## CI/CD
+
+`.github/workflows/ci.yml` exécute sur chaque push vers `main` :
+**scan de secrets (Gitleaks)** → **lint (Oxlint)** → **build (Vite)**.
+
+## Déploiement (Vercel)
+
+- `vercel.json` est prêt (`framework: vite`), Root Directory = racine du repo frontend.
+- Définissez la variable de build **`VITE_API_URL`** dans le tableau de bord Vercel (`https://<votre-backend>.onrender.com/api`).
+- Les assets `/assets/*` sont servis avec cache immuable ; les en-têtes de sécurité sont appliqués globalement.
+
+## Licence
+
+MIT — voir le fichier `LICENSE` à la racine du projet.

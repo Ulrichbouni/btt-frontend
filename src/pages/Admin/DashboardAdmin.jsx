@@ -66,7 +66,7 @@ function DashboardContent() {
         </div>
         <div className="bg-white p-4 rounded-xl shadow text-center border border-gray-100">
           <p className="text-2xl font-bold text-amber-600">{stats.devis_recus}</p>
-          <p className="text-sm text-gray-500">Devis reçus</p>
+          <p className="text-sm text-gray-500">Devis reÃ§us</p>
         </div>
         <div className="bg-white p-4 rounded-xl shadow text-center border border-gray-100">
           <p className="text-2xl font-bold text-green-600">{stats.pros_actifs}</p>
@@ -79,7 +79,7 @@ function DashboardContent() {
       </div>
 
       <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
-        <h3 className="font-bold mb-2">Évolution des devis (6 mois)</h3>
+        <h3 className="font-bold mb-2">Ã‰volution des devis (6 mois)</h3>
         <div className="flex items-end gap-2 h-40">
           {stats.evolution.map((val, i) => (
             <div key={i} className="flex-1 flex flex-col items-center">
