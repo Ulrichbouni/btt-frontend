@@ -17,8 +17,16 @@ export default function Paiement() {
     if (initializedRef.current) return;
     initializedRef.current = true;
 
+    const appId = import.meta.env.VITE_CAMPAY_APP_ID || '';
+    const sandbox = import.meta.env.VITE_CAMPAY_SANDBOX !== 'false';
+    const sdkBase = sandbox ? 'https://demo.campay.net/sdk/js' : 'https://campay.net/sdk/js';
+
+    if (!appId) {
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = 'https://demo.campay.net/sdk/js?app-id=iNSkDT6l6BM1EB6VVj2sawWRK2LIG17N86nM38-GyyENK1K25zrYXyiNMMEvIMr9NOQN20v5fdhQG0mdXzmGmg';
+    script.src = sdkBase + '?app-id=' + appId;
     script.async = true;
     script.onload = () => setCampayReady(true);
     script.onerror = () => setCampayReady(false);
