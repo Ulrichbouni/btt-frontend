@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 
 export default function Login({ onLogin }) {
@@ -28,6 +29,8 @@ export default function Login({ onLogin }) {
         {error && <p className="text-red-600 text-sm">{error}</p>}
         <button className="bg-amber-700 text-white p-3 w-full rounded font-bold" type="submit">Se connecter</button>
       </form>
+      <Link to="/forgot-password" className="text-amber-700 block mt-3 text-sm text-center">Mot de passe oublié ?</Link>
+      <Link to="/register" className="text-amber-700 block mt-2 text-sm text-center">Créer un compte</Link>
     </div>
   );
 }

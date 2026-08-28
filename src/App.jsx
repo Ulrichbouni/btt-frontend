@@ -20,6 +20,9 @@ import MissionsTechnicien from './pages/MissionsTechnicien';
 import OTPSetup from './pages/OTPSetup';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Accueil from './pages/Accueil';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 const PlaceholderPage = ({ title }) => (
   <div className="p-6 text-center">
@@ -115,6 +118,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login onLogin={setUser} />} />
           <Route path="/register" element={<Register onRegistered={(u) => setUser(u)} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<Login onLogin={setUser} />} />
         </Routes>
       </BrowserRouter>
@@ -125,7 +130,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout user={user} onLogout={() => setUser(null)} />}>
-          <Route index element={<PlaceholderPage title="Accueil" />} />
+          <Route index element={<Accueil />} />
           <Route path="produits" element={<Catalogue />} />
           <Route path="calculateur" element={<Calculateur />} />
           <Route path="pros" element={<ProsBTP />} />
