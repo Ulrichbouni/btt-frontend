@@ -20,7 +20,7 @@ import MissionsTechnicien from './pages/MissionsTechnicien';
 import OTPSetup from './pages/OTPSetup';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Accueil from './pages/Accueil';
+import Accueil from './pages/Accueil';\nimport ProfileScreen from './pages/ProfileScreen';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 
