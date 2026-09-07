@@ -20,14 +20,15 @@ import MissionsTechnicien from './pages/MissionsTechnicien';
 import OTPSetup from './pages/OTPSetup';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Accueil from './pages/Accueil';\nimport ProfileScreen from './pages/ProfileScreen';
+import Accueil from './pages/Accueil';
+import ProfileScreen from './pages/ProfileScreen';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 
 const PlaceholderPage = ({ title }) => (
   <div className="p-6 text-center">
     <h2 className="text-2xl font-bold text-amber-800">{title}</h2>
-    <p className="text-gray-600 mt-4">Module en cours de développement</p>
+    <p className="text-gray-600 mt-4">Module en cours de developpement</p>
   </div>
 );
 
@@ -144,6 +145,7 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="missions" element={<MissionsTechnicien />} />
           <Route path="otp" element={<OTPSetup />} />
+          <Route path="profil" element={<ProfileScreen />} />
         </Route>
 
         <Route path="/admin/devis/:id" element={<DevisDetail />} />
@@ -156,11 +158,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
